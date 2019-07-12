@@ -3,9 +3,14 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
+
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.example.jpxtest"
-        minSdkVersion 22
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -26,4 +31,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.navigation:navigation-common:2.1.0-alpha06'
+    implementation 'androidx.navigation:navigation-fragment:2.1.0-alpha06'
+    implementation 'androidx.lifecycle:lifecycle-common:2.2.0-alpha02'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha02'
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0-alpha02'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0-alpha02'
+    implementation 'androidx.core:core:1.2.0-alpha02'
 }
