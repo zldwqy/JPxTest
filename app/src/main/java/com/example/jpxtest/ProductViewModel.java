@@ -2,6 +2,7 @@ package com.example.jpxtest;
 
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -13,18 +14,18 @@ import java.util.List;
 
 public class ProductViewModel extends ViewModel {
     public static final String TAG = "ProductViewModel";
+    MediatorLiveData<List<Product>> mProducts;
 
     public ProductViewModel() {
+        mProducts = new MediatorLiveData<>();
         Log.d(TAG, "ProductViewModel: ");
     }
 
-    MediatorLiveData<List<Product>> mProducts = new MediatorLiveData<>();
 
-    public static final String CONTENT="ABCDEFGHIJKLMNOPQ";
+    public static final String CONTENT = "ABCDEFGHIJKLMNOPQ";
 
 
-    public LiveData<List<Product>> getProducts() {
-//        initProducts();
+    public LiveData<List<Product>> generateProducts() {
         List<Product> products = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
@@ -32,6 +33,13 @@ public class ProductViewModel extends ViewModel {
             products.add(product);
         }
         mProducts.setValue(products);
+        return mProducts;
+    }
+
+    public MediatorLiveData<List<Product>> getProducts() {
+        if (mProducts.getValue() == null) {
+            generateProducts();
+        }
         return mProducts;
     }
 
@@ -49,18 +57,32 @@ public class ProductViewModel extends ViewModel {
     }
 
 
-    public void addProduct(){
+    public boolean addProduct() {
         List<Product> value = mProducts.getValue();
-        value.add(generateProduct(mProducts.getValue().size()));
+        if (value != null && value.size() == CONTENT.length()) {
+            return false;
+        }
+        value.add(generateProduct(value != null ? value.size() : 0));
         mProducts.setValue(value);
+        return true;
     }
 
-    public void deleteProduct(){
+    public void deleteProduct() {
         List<Product> value = mProducts.getValue();
-        value.remove(mProducts.getValue().size() -1);
-        mProducts.setValue(value);
+        if (value != null && value.size() > 0) {
+            value.remove(value.size() - 1);
+            mProducts.setValue(value);
+        }
     }
 
 
-
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        if (mProducts.getValue() != null) {
+            mProducts.getValue().clear();
+            mProducts = null;
+        }
+        Log.d(TAG, "onCleared: ");
+    }
 }

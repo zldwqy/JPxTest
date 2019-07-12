@@ -39,6 +39,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 //            notifyItemRangeInserted(0,mProducts.size());
             notifyDataSetChanged();
         }else {
+//            if (products == null){
+//                mProducts = products;
+//                notifyDataSetChanged();
+//            }
             DiffUtil.Callback diffCallback = new DiffUtil.Callback() {
                 @Override
                 public int getOldListSize() {
@@ -74,7 +78,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
     @Override
     public int getItemCount() {
-        return mProducts.size();
+        return mProducts != null ?mProducts.size() : 0;
     }
 
     public static class CartHolder extends RecyclerView.ViewHolder{

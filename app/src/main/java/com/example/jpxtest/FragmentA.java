@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ public class FragmentA extends Fragment {
 
     public static final String TAG = "FragmentA";
     private CartAdapter cartAdapter;
+    private ProductViewModel productViewModel;
 
     @Nullable
     @Override
@@ -33,8 +35,9 @@ public class FragmentA extends Fragment {
         aBinding.recyclerview.setAdapter(cartAdapter);
         getLifecycle().addObserver(new LocationLifeCycle());
         ProductViewModel.ProductViewModelFactory factory = new ProductViewModel.ProductViewModelFactory();
-        final ProductViewModel productViewModel = ViewModelProviders.of(this, factory).get(ProductViewModel.class);
-//        final ProductViewModel productViewModel = factory.create(ProductViewModel.class);
+        productViewModel = ViewModelProviders.of(this, factory).get(ProductViewModel.class);
+        Log.d(TAG, "onCreateView--productViewModel: "+ productViewModel);
+        //final ProductViewModel productViewModel = factory.create(ProductViewModel.class);
         productViewModel.getProducts().observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(@Nullable List<Product> products) {
@@ -45,11 +48,15 @@ public class FragmentA extends Fragment {
 
             }
         });
+//        productViewModel.generateProducts();
         aBinding.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                productViewModel.addProduct();
-                Log.d(TAG, "addProduct: ");
+                boolean b = productViewModel.addProduct();
+                Log.d(TAG, "addProduct: "+b);
+                if (!b){
+                    Toast.makeText(getContext(),"添加的数量已达上限",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
