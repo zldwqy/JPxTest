@@ -26,7 +26,13 @@
         android:name="com.example.jpxtest.FragmentA"
         android:label="this is a ">
 
+        <action android:id="@+id/action_to_fragmentB"
+            app:destination="@id/b_fragment"></action>
+
     </fragment>
+
+    <fragment android:id="@+id/b_fragment"
+        android:name="com.example.jpxtest.FragmentB"></fragment>
 
     <!--<fragment-->
         <!--android:id="@+id/garden_fragment"-->

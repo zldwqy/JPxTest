@@ -1,6 +1,7 @@
 package com.example.jpxtest;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,8 @@ import java.util.List;
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
     private List<Product> mProducts;
+
+    private IOnItemClickListener onItemClickListener;
     @NonNull
     @Override
     public CartHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -25,11 +28,23 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
 
     @Override
-    public void onBindViewHolder(@NonNull CartHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CartHolder holder, final int position) {
         Product product = mProducts.get(position);
         holder.mbinding.name.setText(product.getName());
         holder.mbinding.price.setText(Float.toString(product.getPrice()));
+        holder.mbinding.getRoot().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(position);
+                }
+            }
+        });
 
+    }
+
+    public void setOnItemClickListener(IOnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     public void setProducts(final List<Product> products) {
@@ -91,6 +106,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
     }
 
 
+    public interface IOnItemClickListener{
+        void onItemClick(int position);
+    }
 
 
 }

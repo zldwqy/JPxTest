@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 
@@ -20,7 +21,7 @@ import com.example.jpxtest.databinding.FragmentABinding;
 import java.util.List;
 
 
-public class FragmentA extends Fragment {
+public class FragmentA extends Fragment implements CartAdapter.IOnItemClickListener {
 
     public static final String TAG = "FragmentA";
     private CartAdapter cartAdapter;
@@ -31,11 +32,12 @@ public class FragmentA extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentABinding aBinding = FragmentABinding.inflate(inflater, container, false);
         cartAdapter = new CartAdapter();
+        cartAdapter.setOnItemClickListener(this);
         aBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         aBinding.recyclerview.setAdapter(cartAdapter);
         getLifecycle().addObserver(new LocationLifeCycle());
         ProductViewModel.ProductViewModelFactory factory = new ProductViewModel.ProductViewModelFactory();
-        productViewModel = ViewModelProviders.of(this, factory).get(ProductViewModel.class);
+        productViewModel = ViewModelProviders.of(getActivity(), factory).get(ProductViewModel.class);
         Log.d(TAG, "onCreateView--productViewModel: "+ productViewModel);
         //final ProductViewModel productViewModel = factory.create(ProductViewModel.class);
         productViewModel.getProducts().observe(this, new Observer<List<Product>>() {
@@ -69,6 +71,7 @@ public class FragmentA extends Fragment {
             }
         });
 
+
         return aBinding.getRoot();
     }
 
@@ -78,5 +81,12 @@ public class FragmentA extends Fragment {
 
 
 
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("position",position);
+        NavHostFragment.findNavController(this).navigate(R.id.action_to_fragmentB,bundle);
     }
 }
