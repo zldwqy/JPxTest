@@ -19,15 +19,13 @@ import java.util.List;
 
 public class ProductViewModel extends ViewModel {
     public static final String TAG = "ProductViewModel";
-    private ProductDao productDao;
     private LiveData<List<Product>> mProducts;
+    private ProductRepository productRepository;
 
-    public ProductViewModel(Context context) {
-        productDao = AppDataBase.getInstance(context).productDao();
-        mProducts = productDao.query();
-        Log.d(TAG, "ProductViewModel: ");
+    public ProductViewModel(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+        mProducts = productRepository.getProducts();
     }
-
 
     public static final String CONTENT = "ABCDEFGHIJKLMNOPQ";
 
@@ -45,9 +43,9 @@ public class ProductViewModel extends ViewModel {
     }
 
     public static class ProductViewModelFactory extends ViewModelProvider.NewInstanceFactory {
-        private Context context;
-        public ProductViewModelFactory(Context context) {
-            this.context = context;
+        private ProductRepository repository;
+        public ProductViewModelFactory(ProductRepository repository) {
+            this.repository = repository;
             Log.d(TAG, "ProductViewModelFactory 构造方法: ");
         }
 
@@ -55,7 +53,7 @@ public class ProductViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             Log.d(TAG, "ProductViewModelFactory create: ");
-            return (T) new ProductViewModel(context);
+            return (T) new ProductViewModel(repository);
         }
     }
 
@@ -65,14 +63,14 @@ public class ProductViewModel extends ViewModel {
         if (value.size() >= CONTENT.length()){
             return false;
         }
-        productDao.insert(generateProduct(value != null ? value.size() : 0));
+        productRepository.insert(generateProduct(value != null ? value.size() : 0));
         return true;
     }
 
     public void deleteProduct() {
         List<Product> value = mProducts.getValue();
         if (value != null && value.size() > 0){
-            productDao.delete(value.get(value.size() -1));
+            productRepository.delete(value.get(value.size() -1));
         }
     }
 

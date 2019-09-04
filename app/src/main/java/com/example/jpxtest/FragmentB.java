@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.jpxtest.data.AppDataBase;
 import com.example.jpxtest.databinding.FragmentBBinding;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class FragmentB extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ProductViewModel.ProductViewModelFactory factory = new ProductViewModel.ProductViewModelFactory(getContext());
+        ProductViewModel.ProductViewModelFactory factory = new ProductViewModel.ProductViewModelFactory(ProductRepository.getInstance(AppDataBase.getInstance(getContext()).productDao()));
         productViewModel = ViewModelProviders.of(getActivity(), factory).get(ProductViewModel.class);
         Log.d(TAG, "onViewCreated: "+productViewModel);
         Bundle arguments = getArguments();

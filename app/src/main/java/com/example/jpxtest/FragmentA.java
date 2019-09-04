@@ -16,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 
+import com.example.jpxtest.data.AppDataBase;
 import com.example.jpxtest.databinding.FragmentABinding;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class FragmentA extends Fragment implements CartAdapter.IOnItemClickListe
         aBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         aBinding.recyclerview.setAdapter(cartAdapter);
         getLifecycle().addObserver(new LocationLifeCycle());
-        ProductViewModel.ProductViewModelFactory factory = new ProductViewModel.ProductViewModelFactory(getContext());
+        ProductViewModel.ProductViewModelFactory factory = new ProductViewModel.ProductViewModelFactory(ProductRepository.getInstance(AppDataBase.getInstance(getContext()).productDao()));
         productViewModel = ViewModelProviders.of(getActivity(), factory).get(ProductViewModel.class);
         Log.d(TAG, "onCreateView--productViewModel: "+ productViewModel);
         productViewModel.getProducts().observe(this, new Observer<List<Product>>() {
