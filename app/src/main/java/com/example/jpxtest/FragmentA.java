@@ -36,10 +36,9 @@ public class FragmentA extends Fragment implements CartAdapter.IOnItemClickListe
         aBinding.recyclerview.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         aBinding.recyclerview.setAdapter(cartAdapter);
         getLifecycle().addObserver(new LocationLifeCycle());
-        ProductViewModel.ProductViewModelFactory factory = new ProductViewModel.ProductViewModelFactory();
+        ProductViewModel.ProductViewModelFactory factory = new ProductViewModel.ProductViewModelFactory(getContext());
         productViewModel = ViewModelProviders.of(getActivity(), factory).get(ProductViewModel.class);
         Log.d(TAG, "onCreateView--productViewModel: "+ productViewModel);
-        //final ProductViewModel productViewModel = factory.create(ProductViewModel.class);
         productViewModel.getProducts().observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(@Nullable List<Product> products) {
@@ -50,7 +49,6 @@ public class FragmentA extends Fragment implements CartAdapter.IOnItemClickListe
 
             }
         });
-//        productViewModel.generateProducts();
         aBinding.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

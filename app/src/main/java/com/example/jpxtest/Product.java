@@ -1,6 +1,11 @@
 package com.example.jpxtest;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Product {
+    @PrimaryKey
     int id;
     float price;
     String name;

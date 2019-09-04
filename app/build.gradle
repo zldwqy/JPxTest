@@ -39,4 +39,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata:2.2.0-alpha02'
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0-alpha02'
     implementation 'androidx.core:core:1.2.0-alpha02'
+    //room
+    implementation 'androidx.room:room-runtime:2.2.0-beta01'
+    annotationProcessor 'androidx.room:room-compiler:2.2.0-beta01'
 }

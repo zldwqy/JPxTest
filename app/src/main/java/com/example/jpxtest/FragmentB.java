@@ -20,6 +20,7 @@ import java.util.List;
 
 public class FragmentB extends Fragment {
 
+    public static final String TAG = "FragmentB";
 
     private ProductViewModel productViewModel;
     private FragmentBBinding bBinding;
@@ -34,12 +35,13 @@ public class FragmentB extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ProductViewModel.ProductViewModelFactory factory = new ProductViewModel.ProductViewModelFactory();
+        ProductViewModel.ProductViewModelFactory factory = new ProductViewModel.ProductViewModelFactory(getContext());
         productViewModel = ViewModelProviders.of(getActivity(), factory).get(ProductViewModel.class);
+        Log.d(TAG, "onViewCreated: "+productViewModel);
         Bundle arguments = getArguments();
         int position = arguments.getInt("position",-1);
         if (position != -1){
-            List<Product> value = productViewModel.mProducts.getValue();
+            List<Product> value = productViewModel.getProducts().getValue();
             if (value != null && value.size() > position) {
                 Product product = value.get(position);
                 String name = product.getName();
